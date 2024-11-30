@@ -9,6 +9,10 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
+set(CMAKE_CXX_FLAGS "-std=c++17")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -march=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wall  -march=native")
+
 SET(OPENMP_LIB OpenMP::OpenMP_CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
@@ -80,7 +84,9 @@ target_link_libraries(
 )
 set_target_properties(LMCore PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}"
     SUFFIX "${PYTHON_MODULE_EXTENSION}")
+
 endif(WITH_CUDA)
+target_compile_features(LMCore PRIVATE cxx_std_17)
 
 
 add_library(

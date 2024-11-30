@@ -16,8 +16,8 @@ torch::Tensor SortIndices(torch::Tensor& pointIdx, torch::Tensor& cameraIdx,
 {
 	long numIndices = pointIdx.size(0);
 	std::vector<std::pair<std::pair<long, long>, long> > results(numIndices);
-	long* ptIdx = static_cast<long*>(pointIdx.storage().data());
-	long* camIdx = static_cast<long*>(cameraIdx.storage().data());
+	long* ptIdx = (long*)(pointIdx.storage().data());
+	long* camIdx = (long*)(cameraIdx.storage().data());
 	for (long i = 0; i < numIndices; ++i) {
 		results[i] = std::make_pair(std::make_pair(ptIdx[i], camIdx[i]), i);
 	}
@@ -25,12 +25,12 @@ torch::Tensor SortIndices(torch::Tensor& pointIdx, torch::Tensor& cameraIdx,
 
 	auto intOptions = torch::TensorOptions().dtype(torch::kInt64);
 	auto startIdx = torch::full({numPoints + 1}, 0, intOptions);
-	auto dStartIdx = static_cast<long*>(startIdx.storage().data());
+	auto dStartIdx = (long*)(startIdx.storage().data());
 	long currentP = 0;
 
 	torch::Tensor featuresTemp = features.clone();
-	auto dFeatures = static_cast<double*>(features.storage().data());
-	auto dFeaturesTemp = static_cast<double*>(featuresTemp.storage().data());
+	auto dFeatures = (double*)(features.storage().data());
+	auto dFeaturesTemp = (double*)(featuresTemp.storage().data());
 	long featDim = features.size(1);
 	for (long i = 0; i < numIndices; ++i) {
 		ptIdx[i] = results[i].first.first;
@@ -65,7 +65,7 @@ std::vector<std::vector<torch::Tensor> > PrepareSeparator(
 	const long* dCamIdx = static_cast<const long*>(cameraIdx.storage().data());
 	const long* dStartIdx = static_cast<const long*>(startIdx.storage().data());
 	const long* label = static_cast<const long*>(cameraLabels.storage().data());
-	long* mask = static_cast<long*>(separatorMask.storage().data());
+	long* mask = (long*)(separatorMask.storage().data());
 
 	long numIndices = pointIdx.size(0);
 	long numPoints = startIdx.size(0) - 1;

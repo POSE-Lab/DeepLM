@@ -55,20 +55,20 @@ std::vector<torch::Tensor> LoadBALFromFile(const char* filename,
 
 	auto tCamera = torch::full({numCameras, kCameraDim},
 		0, floatOptions);
-	auto dCamera = static_cast<double*>(tCamera.storage().data());
+	auto dCamera = (double*)(tCamera.storage().data());
 	memcpy(dCamera, cameraParameters.data(),
 		sizeof(double) * cameraParameters.size());
 
 	auto tPoint = torch::full({numPoints, kPointDim},
 		0, floatOptions);
-	auto dPoint = static_cast<double*>(tPoint.storage().data());
+	auto dPoint = (double*)(tPoint.storage().data());
 	memcpy(dPoint, points3d.data(), sizeof(double) * points3d.size());
 
 	auto tPtIndices = TensorFromIndices(pointIndices);
 	auto tCamIndices = TensorFromIndices(camIndices);
 
 	auto tFeat = torch::full({numObservations, kFeatureDim}, 0, floatOptions);
-	auto dFeat = static_cast<double*>(tFeat.storage().data());
+	auto dFeat = (double*)(tFeat.storage().data());
 	memcpy(dFeat, features2d.data(), sizeof(double) * features2d.size());
 
 	return {tPoint, tCamera, tFeat, tPtIndices, tCamIndices};
